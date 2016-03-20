@@ -65,8 +65,7 @@ console.log(module.exports.decryptMessage(test, "secret key 123"));
 console.log("le programme est termine");
 
 var keyRSA = module.exports.generateRSAKeyPair(512);
-//console.log(keyRSA);
-
+console.log(keyRSA.getPublicKey());
 
 
 
