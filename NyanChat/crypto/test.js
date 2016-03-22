@@ -3,29 +3,44 @@ var nodeRSA = require('node-rsa');
 
 
 
+var key = new nodeRSA();
 
+key.generateKeyPair(1024, 65537);
 
+var texte = "coucou, ceci est un message test";
 
-var key = new nodeRSA()
-var texte = "euh, j'sais pas, genre fais comme si y'avait des trucs ecrits ici ok?";
-key.generateKeyPair(512, 65537);
+/*var encrypted = key.encrypt(texte, 'base64');
 
-
-var encrypted = key.encrypt(texte, 'base64');
-var encryptedAES = nodeAES.AES.encrypt(texte, 'secret key 123');
-
-console.log('chiffre RSA: ' + encrypted);
-console.log('chiffre AES: ' + encryptedAES);
+console.log(encrypted);
 
 var decrypted = key.decrypt(encrypted, 'utf8');
-var decryptedAES = nodeAES.AES.decrypt(encryptedAES.toString(), 'secret key 123');
-decryptedAES = decryptedAES.toString(nodeAES.enc.Utf8);
 
-console.log('dechiffre RSA: ' + decrypted);
-console.log('dechiffre AES: ' + decryptedAES);
-//Here you can test your functions
-//console.log(crypto.test(5));
+console.log(decrypted);*/
 
-//console.log(process.argv[2]);
+var publicComponents = key.exportKey('components-public');
+
+console.log(publicComponents);
+
+var importedKey = new nodeRSA();
+importedKey.importKey(publicComponents);
+
+
+console.log(importedKey);
+
+var encrypted = importedKey.encrypt(texte, 'base64');
+
+console.log(encrypted);
+
+var decrypted = key.decrypt(encrypted, 'utf8');
+
+console.log(decrypted);
+
+
+
+
+
+
+
+
 
 

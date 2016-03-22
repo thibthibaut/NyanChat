@@ -14,10 +14,9 @@ module.exports = {
                 //Carreful, this return a full key, private and public, do not sent that key to others
   },
 
-  generateRSAPublicKey: function(){
-
-
-    return;
+  generateRSAPublicKey: function(generatedKeyPair){
+    var publicRSAKey = generatedKeyPair.exportKey('components-public');
+    return publicRSAKey;
   },
 
   /**
@@ -32,16 +31,20 @@ module.exports = {
   },
 
   encryptAES: function(AESKey, RSAPubKey){
+    var publicKey = new nodeRSA();
+    publicKey.importKey(RSAPubKey);
+
+    var encryptedAES = publicKey.encrypt(AESKey, 'base64');
     
-    return;//Encrypted AES Key
+    return encryptedAES;//Encrypted AES Key
   },
 
 
   decryptAES: function(AESCypher, RSAPrivKey){
     
-    //var decryptedAES = RSAPrivKey.decrypt(AESCypher, 'utf8');
+    var plainAES = RSAPrivKey.decrypt(AESCypher, 'base64'); //I admit I'm not sure of the final format
 
-    return;//Plain AES Key
+    return plainAES;//Plain AES Key
   },
 
   encryptMessage: function(message, key){
@@ -59,16 +62,28 @@ module.exports = {
 
 //console.log(module.exports.test(5));
 console.log("le programme commence");
-var test = module.exports.encryptMessage("ceci est mon message a chiffrer", "secret key 123");
+
+var AES = "secret key 123";
+var texte = "ceci est mon message a chiffrer";
+var test = module.exports.encryptMessage(texte, AES);
 console.log(test);
-console.log(module.exports.decryptMessage(test, "secret key 123"));
-console.log("le programme est termine");
-
-var keyRSA = module.exports.generateRSAKeyPair(512);
-//console.log(keyRSA);
+console.log(module.exports.decryptMessage(test, AES));
 
 
+var keyRSA = module.exports.generateRSAKeyPair(2048);
+var publicKey = module.exports.generateRSAPublicKey(keyRSA);
 
+var encryptedAES = module.exports.encryptAES(AES, publicKey);
+
+console.log(encryptedAES);
+
+var decryptedAES = module.exports.decryptAES(encryptedAES, keyRSA);
+
+console.log(decryptedAES);
+
+console.log(module.exports.decryptMessage(test, AES));
+
+console.log('le programme est termine');
 
 
 
