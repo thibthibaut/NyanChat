@@ -63,7 +63,7 @@ module.exports = {
 //console.log(module.exports.test(5));
 console.log("le programme commence");
 
-var AES = "secret key 123";
+var AES = "0123456789101213";
 var texte = "ceci est mon message a chiffrer";
 var test = module.exports.encryptMessage(texte, AES);
 console.log(test);
