@@ -1,5 +1,7 @@
 var nodeRSA = require('node-rsa');
 var nodeAES = require('crypto-js');
+var randomAES = require('crypto');
+
 
 module.exports = {
 
@@ -26,8 +28,9 @@ module.exports = {
    * @returns {undefined}
    */
   generateAESKey: function(){
+    var key = randomAES.randomBytes(256);
 
-    return; 
+    return key.toString('base64'); 
   },
 
   encryptAES: function(AESKey, RSAPubKey){
@@ -61,13 +64,14 @@ module.exports = {
 }
 
 //console.log(module.exports.test(5));
+/* A partir de la, tout fonctionne, decommente les lignes suivantes pour un exemple d'utilisation, bon courage pour le reste :p
 console.log("le programme commence");
 
-var AES = "0123456789101213";
+var AES = module.exports.generateAESKey();
 var texte = "ceci est mon message a chiffrer";
 var test = module.exports.encryptMessage(texte, AES);
-console.log(test);
-console.log(module.exports.decryptMessage(test, AES));
+console.log('\nmessage chiffre : ' + test);
+console.log('\nmessage dechiffre : ' + module.exports.decryptMessage(test, AES));
 
 
 var keyRSA = module.exports.generateRSAKeyPair(2048);
@@ -75,16 +79,16 @@ var publicKey = module.exports.generateRSAPublicKey(keyRSA);
 
 var encryptedAES = module.exports.encryptAES(AES, publicKey);
 
-console.log(encryptedAES);
+console.log('\ncle AES chiffre : ' + encryptedAES);
 
 var decryptedAES = module.exports.decryptAES(encryptedAES, keyRSA);
 
-console.log(decryptedAES);
+console.log('\nclee AES : ' + decryptedAES);
 
 console.log(module.exports.decryptMessage(test, AES));
 
 console.log('le programme est termine');
-
+*/
 
 
 
