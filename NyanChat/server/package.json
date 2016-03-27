@@ -1,0 +1,20 @@
+{
+  "name": "nyanchat",
+  "version": "1.0.0",
+  "description": "crypted server",
+  "main": "/connection",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thibthibaut/NyanChat.git"
+  },
+  "author": "ThibThibNat",
+  "license": "Beerware",
+  "bugs": {
+    "url": "https://github.com/thibthibaut/NyanChat/issues"
+  },
+  "homepage": "https://github.com/thibthibaut/NyanChat#readme"
+}
