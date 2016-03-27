@@ -1,10 +1,15 @@
-var io = require('socket.io')(1337);
+var socketio = require('socket.io');
 
-io.sockets.on('connection', (socket) => {
+var io = socketio.listen(1337);
+
+  io.on('connection', function(socket){
+
+  console.log('hello world');
  
-  socket.on('send', function(data){
- 
-    io.sockets.emit('message', data);
- 
-  });
+  socket.on('connect', function(v){
+
+    console.log('coucou');
+    console.log(v);
+
+  }); 
 });
