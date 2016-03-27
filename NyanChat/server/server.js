@@ -1,6 +1,4 @@
-var socketio = require('socket.io');
-
-var io = socketio.listen(1337);
+var io = require('socket.io')(1337);
 
 io.sockets.on('connection', (socket) => {
  
