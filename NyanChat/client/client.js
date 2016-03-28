@@ -7,7 +7,7 @@ var nickName;
 var publicKey = "chauca je te laisse implementer ce truc x)";
 
 //the server should received the connection and launch 'hello world' 
-var socket = io.connect('http://localhost', {port: 1337});
+var socket = io.connect('127.0.0.1', {port: 1337});
 
 var rl = readline.createInterface(process.stdin, process.stdout); 
 

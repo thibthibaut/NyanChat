@@ -1,8 +1,13 @@
-var socketio = require('socket.io');
+var express = require('express');
+var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
 
-var io = socketio.listen(1337);
+server.listen(1337, function(){
+  console.log('listening');
+});
 
-  io.on('connection', function(socket){
+io.on('connection', function(socket){
 
   console.log('hello world');
  
@@ -12,4 +17,5 @@ var io = socketio.listen(1337);
     console.log(v);
 
   }); 
+
 });
