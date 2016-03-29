@@ -1,7 +1,8 @@
-var express = require('express');
-var app = express();
-var server = require('http').createServer(app);
-var io = require('socket.io')(server);
+'use strict'
+const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 server.listen(1337, function(){
   console.log('listening');
@@ -33,4 +34,31 @@ io.on('connection', function(socket){
       message: socket.nickname + " has left the chat"    
      });    
   });
+
+  socket.on('join', (roomName) => {
+    socket.join(roomName);
+    console.log('user joined ' + roomName);
+    socket.emit('serverInfo', 'You joined ' + roomName);
+  });
+
+   socket.on('leave', (roomName) => {
+    socket.leave(roomName);
+    console.log('user leaved ' + roomName);
+    socket.emit('serverInfo', 'You leaved ' + roomName);
+  });
+
+
+  socket.on('talk', (data) => {
+
+    let user = data.pseudo;
+    let room = data.room;
+    let message = data.message;
+    socket.to(room).emit('message', {
+      pseudo: user,
+      message: message
+    })
+
+  });
+
+
 });
