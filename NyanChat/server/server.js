@@ -28,6 +28,12 @@ io.on('connection', function(socket){
     });
   });
 
+ socket.on('aesForce', function(data){
+    socket.broadcast.emit('aesForce', {
+      aesForce: data
+    });
+  });
+
   socket.on('disconnect', function(){
     --users;
     socket.broadcast.emit('left', {

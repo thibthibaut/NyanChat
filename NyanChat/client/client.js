@@ -2,11 +2,15 @@
 const readline = require('readline');
 const io = require('socket.io-client');
 const colors = require('colors');
+const crypto = require('../crypto/crypto');
 
 
 var nickName;
 var currentRoom = null;
-var publicKey = "chauca je te laisse implementer ce truc x)";
+var privateKey = crypto.generateRSAKeyPair(512);
+var publicKey = crypto.generateRSAPublicKey(privateKey);
+var AESKey = crypto.generateAESKey();
+
 
 var socket = io.connect('http://localhost:1337');
 
@@ -17,7 +21,8 @@ rl.setPrompt('😼  '); //So badass
 function sendMessage(data){
   if(data[0] == '/') //If we have a slash its a command (e.g /join)
     return executeCommand(data.substring(1)); //Call execute command with the command (whithout the '/')
-
+	
+  data = crypto.encryptMessage(data, AESKey);
   socket.emit('talk', {pseudo: nickName, room: currentRoom ,message: data})
   rl.prompt();
 }
@@ -35,6 +40,9 @@ function executeCommand(data){
     case 'leave':
       socket.emit('leave', currentRoom);
       currentRoom = null;
+    case 'aesForce':
+      socket.emit('aesForce', AESKey);
+      break;
     case 'help':
       //TODO
       break;
@@ -101,11 +109,18 @@ socket.on('welcome', (data) => {
   rl.prompt();
 });
 socket.on('message', (data) => {
+  data.message = crypto.decryptMessage(data.message, AESKey);
   displayMessage(data);
   rl.prompt();
 });
 //Message from the server and for you only <3
   socket.on('serverInfo', (message) => {
   console.log(colors.yellow(message) ) 
+  rl.prompt();
+});
+//Force to get aes key from another client, function to test crypto
+  socket.on('aesForce', (data) => {
+  AESKey = data.aesForce;
+  console.log('ca a marche');
   rl.prompt();
 });
