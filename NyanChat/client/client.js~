@@ -53,7 +53,7 @@ function executeCommand(data){
       console.log(cryptedAES);
       break;
     case 'test':
-      socket.emit('test', {data:dataTest, target:parameter, user:nickName});
+      socket.emit('test', dataTest, parameter);
       break;
 }
 
