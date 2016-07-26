@@ -11,8 +11,11 @@ server.listen(1337, function(){
 var users = 0;
 var roomsAndUsers;
 var parki = [];
+var socketMap = {};
 
 io.on('connection', function(socket){
+
+  socketMap[socket.id] = socket;
 
   socket.on('add user', function(data){
     socket.nickname = data.pseudo;
@@ -42,6 +45,8 @@ io.on('connection', function(socket){
 
   socket.on('disconnect', function(){
     --users;
+
+    console.log("WOW SHIT !");
     socket.broadcast.emit('left', {
       message: socket.nickname + " has left the chat"    
      });    
@@ -51,7 +56,9 @@ io.on('connection', function(socket){
     var roomName = data.roomName;
     var userName = data.userName;
     var publicKey = data.publicKey;
-    var user = { name: userName, key: publicKey }
+    var socketID = socket.id;
+    var user = { name: userName, key: publicKey, socketID: socketID }
+
     //TODO: Check if pubKey is valid
     console.log('debug: ');
     console.log(user);
@@ -71,19 +78,17 @@ io.on('connection', function(socket){
     else{ //User is not OP, he or she need the AES Key
       //Ask OP to encrypt AES and send it back
 
-      //Here I send to everyone, only OP will respond
-      //TODO: SEND ONLY TO OP
-      socket.broadcast.emit('plzEncryptAES', user);
+      var op_socket = socketMap[parki[0].socketID];
 
+      op_socket.emit('plzEncryptAES', user);
     }
   
   });
   
   socket.on('hereIsEncryptedAES', function(message){
     
-    //Send to everyone the encrypted AES, only the client with right username will decrypt
-    //TODO: Send only to specific client
-    socket.broadcast.emit('encryptedAES', message);
+    guy_asking_for_aes_socket = socketMap[ message.user.socketID ];
+    guy_asking_for_aes_socket.emit('encryptedAES', message);
 
   });
   

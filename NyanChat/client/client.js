@@ -175,15 +175,12 @@ socket.on('plzEncryptAES', function(user){
 
   console.log(colors.red('Encryping AES for a ' + user.name) );
   var cypher = crypto.encryptAES(AESKey, user.key);
-  socket.emit('hereIsEncryptedAES', {user: user.name, encryptedAES: cypher});
+  socket.emit('hereIsEncryptedAES', {user: user, encryptedAES: cypher});
   console.log(colors.red('Done') ) 
 
 });
 
 socket.on('encryptedAES', function(message){
-  //First check if user is us or no
-  if( message.user != nickName)
-    return; 
 
   console.log( colors.red('Decrypting recieved AES key...'));
   AESKey = crypto.decryptAES(message.encryptedAES, keyPair.private);
